@@ -1,0 +1,30 @@
+FROM python:3.4
+
+#Install the pre-requisite software. Ubuntu operating system. 
+# lynx command line browser to test webpages on the container/
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        postgresql-client  lynx \
+    && rm -rf /var/lib/apt/lists/*
+
+#WORKDIR /usr/src/app
+
+#Create a directory to copy the source code to container/
+RUN mkdir -pv /home/app/my0903
+
+#Copy the code from local machine to container
+COPY  my0903 /home/app/my0903
+
+# This is the directory  from where the ENTRYPOINT command would be running.
+#Also you would be pointing to this directory if you ssh into the container. 
+WORKDIR /home/app/my0903
+
+#Install Dajango and postgresql python library.
+RUN pip install Django
+RUN pip install psycopg2
+#COPY . .
+
+#This the port exposed from the container.
+EXPOSE 3333
+#This is the command exectuted from /home/app/my0903 directory when the 'kubectl run' is executed.
+ENTRYPOINT  ["python", "manage.py", "runserver", "0.0.0.0:3333"]

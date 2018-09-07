@@ -1,0 +1,31 @@
+{% load staticfiles %}
+ 
+<form action="{% url 'save' %}" method="POST"> {%csrf_token %}
+	<h1>Login Screen For Test - Django App1</h1>
+	<p> <label for="username"> UserName:<input type="text" value=" " placeholder="username" name="username"> </p>
+	<p> <label for="emailid"> EmailId &nbsp&nbsp &nbsp:<input type="text" value=" " placeholder="emailid" name="emailid"> </p>
+        <input type="submit" value="Log in"/>
+</form>
+
+<table border="1">
+     <thead>
+        <tr>
+            <th> UserName </th>
+            <th> EmailId  </th>
+    
+        </tr>
+     </thead>
+  
+     <tbody>
+            {% for userinfo in userinfolist %}
+               <tr>
+                 
+                   <td> {{ userinfo.username }} </td>
+                   <td> {{ userinfo.emailid }} </td>
+
+                <tr>
+             {%  endfor  %}
+     
+    </tbody>
+</table>
+ 
