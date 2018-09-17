@@ -1,0 +1,2 @@
+Xvfb  :49  -ac &
+export DISPLAY=:49
