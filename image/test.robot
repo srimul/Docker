@@ -28,6 +28,7 @@ Check For Username and emailid Element
 Validate the last enter username and emailid
     log to console  Start Of validate Test Case!!!!
     Selenium2Library.Open Browser  http://169.55.86.55:32287  firefox
+    #Change user12 to other name if you want to test it for a different name. Use the same name in  Line #40 and #41 also
     Input Text  username  user12
     Input Text  emailid  user12@mail.com
     Click Element  login
