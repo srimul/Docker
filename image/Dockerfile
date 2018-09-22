@@ -1,28 +1,31 @@
+#Dockefile for creating a docker image : Ubuntu  Pyhton Robotframework selenium library
+#Commnet
 FROM ubuntu:latest
 
 RUN apt-get update
-RUN apt-get install -y firefox xvfb python-pip
-RUN apt-get install -y wget
-RUN apt-get install -y vim
-RUN pip install robotframework
-RUN pip install robotframework-selenium2library
-RUN pip install robotframework-xvfb
+RUN apt-get install -y python python-pip wget gcc phantomjs firefox
 
-#Download gecko driver and place it in appropriate place.
-RUN wget  https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
-RUN tar -xvf geckodriver-v0.22.0-linux64.tar.gz
+RUN apt-get install -y xvfb
+
+RUN apt-get install sudo 
+
+RUN sudo apt install -y vim
+
+RUN sudo apt install -y lynx
+RUN pip install robotframework
+RUN pip install robotframework-sshlibrary
+RUN pip install robotframework-xvfb
+RUN pip install robotframework-selenium2library
+
+WORKDIR  /home
+RUN apt-get install -y wget
+RUN wget  https://github.com/mozilla/geckodriver/releases/download/v0.21.0/geckodriver-v0.21.0-linux64.tar.gz 
+RUN tar -xvf  geckodriver-v0.21.0-linux64.tar.gz
 RUN cp geckodriver /usr/bin
 
 
-RUN mkdir -p /root/robotframework_test
-
-WORKDIR /root/robotframework_test
-
-#copy the test case
-ADD test.txt /root/robotframework_test
-#copy the steps to be followed.
-ADD steps.txt /root/robotframework_test
+EXPOSE 4000
 
 
-#CMD (Xvfb :10 -ac & export DISPLAY=:10; wget -qO- https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz | tar -xz -C /usr/bin/; pybot -d /root/reports/ /root/robotframework_test/test.txt)
-
+ADD test.robot /home
+ADD t1.robot /home
