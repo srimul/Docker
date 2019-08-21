@@ -1,0 +1,48 @@
+# This is a Azure pipeline project with VMSS ( scale Sets) and Auto Scaling.
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+steps:
+  # Sample command to test echo
+  - script: echo This is a build pipeline using Azure-pipelines
+  # This is a sample command to test mkdir
+  - script: mkdir sampledir
+
+  # Actual script needed for you.
+  - script: |
+      ls -ltr 
+      # The values passed in the below command are generated using "az ad sp create-for-rbac --name ServicePrincipalName" after you login to portal using 'az login ' manually.
+      az login --service-principal --username "3d587273-dcac-47f1-b714-72f244c67c52"  --password "8ec3a20c-e55e-4341-abec-28d57eab3be1" --tenant "59b2865a-7fb8-4ccb-ab68-72cbca88fc48"
+      # You may edit the vlaues from line number 17 to line number 27
+      AdminPassword=MLK123ATL!!ffD$
+      rgName=myResourceGroup4
+      locName=westeurope
+      vnetName=myVnet4
+      subnetName=mySubnet4
+      publicIP=myPublicIP4
+      nsgName=myNetworkSecurityGroup4
+      nicName=myNic4
+      vmName=myVM4
+      userName=clouduser
+      vmssName=myVMSS1
+      az group create --name $rgName --location $locName  --output table
+      az network vnet create --resource-group $rgName --name $vnetName --subnet-name $subnetName  --output table
+      az network public-ip create --resource-group $rgName --name $publicIP  --output table
+      az network nsg create --resource-group $rgName --name $nsgName  --output table
+      az network nic create \
+        --resource-group $rgName \
+        --name $nicName \
+        --vnet-name $vnetName \
+        --subnet $subnetName \
+        --network-security-group $nsgName \
+        --public-ip-address $publicIP \
+        --output table
+      az vmss create -n $vmssName -g $rgName --instance-count 2 --image OpenLogic:CentOS-CI:7-CI:latest  --admin-username $userName  --admin-password $AdminPassword --data-disk-sizes-gb 4 --generate-ssh-keys  --output table
+      az vmss list-instances -n $vmssName -g $rgName --query "[].id" --output tsv | \
+                        az vmss run-command invoke --scripts 'sudo touch /tmp/file1.txt && sudo curl -fsSL https://get.docker.com/ | sh' \
+                            --command-id RunShellScript --ids @-  
+ #    az vmss run-command invoke -g $rgName -n $vmssName --command-id RunShellScript  --instance-id 1 --scripts "sudo touch /tmp/file1.txt && sudo curl -fsSL https://get.docker.com/ | sh"
+ #    az vm run-command invoke -g $rgName -n $vmName --command-id RunShellScript --scripts "sudo touch /tmp/file1.txt && sudo curl -fsSL https://get.docker.com/ | sh"  --output table
+ #    az vm open-port --port 3389 --resource-group myResourceGroup --name myVM
