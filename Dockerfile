@@ -21,3 +21,4 @@ RUN pip install psycopg2
 EXPOSE 3333
 #you need to copy manage.py file
 ENTRYPOINT  ["python", "manage.py", "runserver", "0.0.0.0:3333"]
+#Change added in brMerge barnch only.
