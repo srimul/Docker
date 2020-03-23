@@ -14,6 +14,7 @@ COPY  my0903 /home/app/my0903
 WORKDIR /home/app/my0903
 
 #you need to create requirements.txt file. 
+# This is a comment
 RUN pip install Django
 RUN pip install psycopg2
 #COPY . .
