@@ -6,6 +6,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 #WORKDIR /usr/src/app
+#This is comment added to the code
 
 RUN mkdir -pv /home/app/my0903
 
